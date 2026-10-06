@@ -1,0 +1,988 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f2f6f3">
+  <title>BankLite | ระบบจัดการข้อมูลธนาคาร</title>
+  <style>
+    @font-face {
+      font-family: "Thaisarabun";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("assets/fonts/sarabun-thai-400.woff2") format("woff2");
+      unicode-range: U+02D7, U+0303, U+0331, U+0E01-0E5B, U+200C-200D, U+25CC;
+    }
+    @font-face {
+      font-family: "Thaisarabun";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("assets/fonts/sarabun-latin-400.woff2") format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: "Thaisarabun";
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url("assets/fonts/sarabun-thai-500.woff2") format("woff2");
+      unicode-range: U+02D7, U+0303, U+0331, U+0E01-0E5B, U+200C-200D, U+25CC;
+    }
+    @font-face {
+      font-family: "Thaisarabun";
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url("assets/fonts/sarabun-latin-500.woff2") format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: "Thaisarabun";
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+      src: url("assets/fonts/sarabun-thai-600.woff2") format("woff2");
+      unicode-range: U+02D7, U+0303, U+0331, U+0E01-0E5B, U+200C-200D, U+25CC;
+    }
+    @font-face {
+      font-family: "Thaisarabun";
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+      src: url("assets/fonts/sarabun-latin-600.woff2") format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: "Thaisarabun";
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url("assets/fonts/sarabun-thai-700.woff2") format("woff2");
+      unicode-range: U+02D7, U+0303, U+0331, U+0E01-0E5B, U+200C-200D, U+25CC;
+    }
+    @font-face {
+      font-family: "Thaisarabun";
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url("assets/fonts/sarabun-latin-700.woff2") format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    :root {
+      color-scheme: light;
+      --ink: #19352b;
+      --muted: #718178;
+      --green: #16734d;
+      --green-dark: #10593b;
+      --green-light: #e8f3ec;
+      --line: #e4ebe6;
+      --canvas: #f2f6f3;
+      --white: #fff;
+      --red: #bd5454;
+      --gold: #aa7a2b;
+      font-family: "Thaisarabun", sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--canvas); color: var(--ink); }
+    button, input, select { font: inherit; }
+    button { color: inherit; }
+    .app { min-height: 100vh; display: grid; grid-template-columns: 254px minmax(0, 1fr); }
+    .sidebar { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; padding: 25px 17px 18px; background: #153f30; color: #e4eee8; }
+    .brand { display: flex; align-items: center; gap: 12px; padding: 1px 11px 29px; color: white; font-size: 19px; font-weight: 730; letter-spacing: .1px; }
+    .brand-mark { width: 39px; height: 39px; display: grid; place-items: center; border-radius: 12px; background: #2a9164; color: white; font-size: 23px; }
+    .brand-caption { display: block; color: #a9c7b5; font-size: 10px; font-weight: 450; letter-spacing: .3px; margin-top: 3px; }
+    .nav-label { padding: 0 12px 9px; color: #9fbeac; font-size: 10px; font-weight: 700; letter-spacing: 1.1px; }
+    .nav { display: grid; gap: 5px; }
+    .nav button { display: flex; align-items: center; gap: 13px; width: 100%; border: 0; border-radius: 9px; padding: 11px 12px; background: transparent; color: #c3d8cb; text-align: left; font-size: 13px; cursor: pointer; transition: background .15s, color .15s; }
+    .nav button:hover, .nav button.active { background: #286147; color: white; }
+    .nav button.active { box-shadow: inset 3px 0 #90d0a8; }
+    .nav-icon { width: 20px; text-align: center; font-size: 16px; }
+    .sidebar-bottom { margin-top: auto; }
+    .sidebar-user { display: flex; align-items: center; gap: 10px; padding: 17px 6px 0; }
+    .avatar { width: 35px; height: 35px; flex: none; display: grid; place-items: center; border-radius: 50%; background: #d8e9dd; color: #225c3f; font-weight: 700; font-size: 12px; }
+    .user-name { color: white; font-size: 12px; font-weight: 650; }
+    .user-role { color: #a9c7b5; font-size: 10px; margin-top: 3px; }
+    .sidebar-account { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 14px; margin-top: 14px; border-top: 1px solid #ffffff1f; }
+    .employee-code { color: #a9c7b5; font-size: 10px; }
+    .logout-button { border: 1px solid #ffffff30; border-radius: 7px; padding: 6px 9px; background: transparent; color: #e4eee8; font: inherit; font-size: 10px; cursor: pointer; }
+    .logout-button:hover { background: #ffffff12; }
+    main { min-width: 0; padding: 0 clamp(18px, 3.5vw, 48px) 40px; }
+    .topbar { min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 15px; border-bottom: 1px solid var(--line); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 11px; }
+    .breadcrumb strong { color: var(--ink); font-weight: 650; }
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+    .global-search { width: min(260px, 28vw); height: 36px; padding: 0 11px 0 34px; border: 1px solid var(--line); border-radius: 8px; outline: none; background: white; color: var(--ink); font-size: 11px; }
+    .search-wrap { position: relative; }
+    .search-wrap:before { position: absolute; content: "⌕"; left: 12px; top: 5px; color: #84958a; font-size: 20px; }
+    .icon-button { width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 8px; background: white; color: #50675a; cursor: pointer; }
+    .icon-button:hover, .secondary-button:hover { border-color: #a8c6b2; background: #f8fbf8; }
+    .mobile-menu { display: none; }
+    .page { display: none; padding-top: 27px; }
+    .page.active { display: block; }
+    .page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 19px; }
+    h1 { margin: 0 0 6px; color: var(--ink); font-size: clamp(22px, 2.5vw, 28px); letter-spacing: -.5px; }
+    .page-heading p { margin: 0; color: var(--muted); font-size: 12px; }
+    .heading-actions { display: flex; align-items: center; gap: 8px; }
+    .date-label { color: var(--muted); font-size: 11px; white-space: nowrap; }
+    .primary-button, .secondary-button { min-height: 35px; padding: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: white; color: #42604f; font-size: 11px; cursor: pointer; white-space: nowrap; }
+    .primary-button { border-color: var(--green); background: var(--green); color: white; font-weight: 650; }
+    .primary-button:hover { background: var(--green-dark); }
+    .demo-banner { margin-bottom: 18px; padding: 11px 14px; border: 1px solid #d6e8db; border-radius: 9px; background: #eaf4ed; color: #42694f; font-size: 11px; line-height: 1.5; }
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 13px; margin-bottom: 17px; }
+    .card { min-width: 0; border: 1px solid var(--line); border-radius: 11px; background: var(--white); box-shadow: 0 3px 12px #18372908; }
+    .stat { min-height: 122px; padding: 15px 16px; }
+    .stat-top { display: flex; justify-content: space-between; align-items: center; gap: 7px; color: var(--muted); font-size: 11px; }
+    .stat-icon { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 9px; background: var(--green-light); color: var(--green); font-size: 15px; }
+    .stat-value { margin-top: 13px; color: var(--ink); font-size: 23px; font-weight: 720; letter-spacing: -.4px; }
+    .stat-foot { margin-top: 3px; color: #8a988f; font-size: 10px; }
+    .balance-toggle { border: 0; padding: 3px; background: transparent; color: #6c8174; cursor: pointer; font-size: 14px; }
+    .two-col { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(270px,.8fr); gap: 15px; }
+    .panel { padding: 17px; }
+    .panel-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 15px; }
+    .panel-heading h2 { margin: 0; font-size: 14px; }
+    .panel-heading p { margin: 4px 0 0; color: var(--muted); font-size: 10px; }
+    .select, .filter-input { min-height: 32px; padding: 0 9px; border: 1px solid var(--line); border-radius: 7px; outline: none; background: white; color: #53675a; font-size: 10px; }
+    .select:focus, .filter-input:focus, .global-search:focus { border-color: #6ea986; box-shadow: 0 0 0 3px #dff0e4; }
+    .chart-total { margin: 2px 0 10px; color: var(--muted); font-size: 10px; }
+    .chart-total strong { margin-right: 7px; color: var(--ink); font-size: 19px; }
+    .chart { height: 142px; display: flex; align-items: end; justify-content: space-around; gap: 9px; padding: 0 7px; border-bottom: 1px solid var(--line); background: repeating-linear-gradient(to bottom, transparent 0 34px, #edf2ee 35px 36px); }
+    .bar-group { height: 100%; min-width: 18px; display: flex; flex: 1; align-items: end; justify-content: center; gap: 4px; }
+    .bar { width: min(16px, 38%); border-radius: 4px 4px 0 0; background: #a9d0b5; }
+    .bar.income { background: #37936a; }
+    .axis { display: flex; justify-content: space-around; padding-top: 7px; color: #8c9a90; font-size: 9px; }
+    .legend { display: flex; justify-content: flex-end; gap: 13px; margin-top: 10px; color: var(--muted); font-size: 9px; }
+    .dot { display: inline-block; width: 7px; height: 7px; margin-right: 4px; border-radius: 50%; background: #37936a; }
+    .dot.out { background: #a9d0b5; }
+    .quick-actions { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 15px; }
+    .quick { min-height: 67px; display: grid; place-content: center; gap: 5px; border: 1px solid var(--line); border-radius: 8px; background: white; color: #50685a; text-align: center; font-size: 10px; cursor: pointer; }
+    .quick:hover { border-color: #9fc6aa; background: #f8fcf9; }
+    .quick span { color: var(--green); font-size: 17px; }
+    .status-box { margin-top: 17px; padding: 12px; border-radius: 8px; background: #f4f8f5; }
+    .status-title { margin-bottom: 10px; font-size: 11px; font-weight: 650; }
+    .status-row { display: flex; justify-content: space-between; gap: 8px; margin-top: 7px; color: var(--muted); font-size: 10px; }
+    .status-row strong { color: var(--green); font-weight: 650; }
+    .table-panel { margin-top: 15px; padding: 17px; }
+    .table-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: -1px 0 12px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 7px; }
+    .table-search { width: min(230px, 45vw); }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap; }
+    th { padding: 10px 9px; border-bottom: 1px solid var(--line); color: #84938a; font-size: 9px; font-weight: 650; }
+    td { padding: 11px 9px; border-bottom: 1px solid #eff3f0; color: #4d6255; font-size: 10px; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: #f8fbf8; }
+    .row-title { display: block; color: var(--ink); font-size: 10px; font-weight: 650; }
+    .row-sub { display: block; margin-top: 3px; color: #8d9b91; font-size: 9px; }
+    .amount-in { color: var(--green); font-weight: 650; }
+    .amount-out { color: var(--red); font-weight: 650; }
+    .badge { display: inline-block; padding: 4px 7px; border-radius: 20px; background: #e8f4eb; color: #24724a; font-size: 9px; }
+    .badge.current { background: #f3efe5; color: #87692e; }
+    .empty { display: none; padding: 23px; color: var(--muted); text-align: center; font-size: 11px; }
+    .table-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 11px; color: var(--muted); font-size: 10px; }
+    .pagination { display: flex; gap: 5px; }
+    .page-button { min-width: 27px; height: 27px; padding: 0 6px; border: 1px solid var(--line); border-radius: 6px; background: white; color: #64766a; font-size: 10px; cursor: pointer; }
+    .page-button.active { border-color: var(--green); background: var(--green); color: white; }
+    .page-button:disabled { opacity: .45; cursor: default; }
+    .summary-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 13px; }
+    .summary-card { padding: 17px; }
+    .summary-card span { color: var(--muted); font-size: 10px; }
+    .summary-card strong { display: block; margin-top: 9px; color: var(--ink); font-size: 20px; }
+    .toast { position: fixed; right: 22px; bottom: 22px; z-index: 5; max-width: min(380px,calc(100vw - 30px)); padding: 12px 16px; border-radius: 9px; background: #173f30; color: white; box-shadow: 0 8px 24px #10281d30; font-size: 11px; opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .18s,transform .18s; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .row-action { min-height: 30px; padding: 0 9px; border: 1px solid var(--line); border-radius: 7px; background: white; color: var(--green); font-size: 10px; cursor: pointer; }
+    .row-action:hover { border-color: #a8c6b2; background: #f4faf5; }
+    .row-actions { display: flex; gap: 6px; white-space: nowrap; }
+    .row-action.danger { color: #a33c35; }
+    .row-action.danger:hover { border-color: #e3b1ad; background: #fff7f6; }
+    dialog.record-dialog { width: min(560px, calc(100vw - 28px)); max-height: min(90vh, 760px); padding: 0; border: 1px solid var(--line); border-radius: 15px; color: var(--ink); box-shadow: 0 24px 70px #10281d38; }
+    dialog.record-dialog::backdrop { background: #10261c75; }
+    .record-form { padding: 22px; }
+    .record-form h2 { margin: 0; font-size: 19px; }
+    .record-form p { margin: 5px 0 17px; color: var(--muted); font-size: 11px; }
+    .record-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .record-field { display: grid; gap: 5px; color: #53675a; font-size: 11px; }
+    .record-field.full { grid-column: 1 / -1; }
+    .record-field input, .record-field select, .record-field textarea { width: 100%; min-height: 38px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: white; color: var(--ink); font: inherit; }
+    .record-field textarea { min-height: 75px; resize: vertical; }
+    .record-error { min-height: 18px; margin-top: 12px; color: var(--red); font-size: 11px; }
+    .record-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+    .record-actions button:disabled { opacity: .6; cursor: wait; }
+    .scrim { display: none; }
+    @media (max-width: 1050px) {
+      .stats { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .two-col { grid-template-columns: minmax(0,1fr); }
+    }
+    @media (max-width: 690px) {
+      .app { display: block; }
+      .sidebar { position: fixed; z-index: 10; left: 0; top: 0; width: 254px; transform: translateX(-105%); transition: transform .2s; box-shadow: 8px 0 30px #13291e22; }
+      body.menu-open .sidebar { transform: translateX(0); }
+      .scrim { position: fixed; z-index: 9; inset: 0; background: #10261c70; }
+      body.menu-open .scrim { display: block; }
+      main { padding: 0 14px 28px; }
+      .topbar { min-height: 60px; }
+      .mobile-menu { display: inline-grid; place-items: center; }
+      .breadcrumb { gap: 6px; }
+      .global-search { width: min(170px,38vw); }
+      .top-actions { gap: 7px; }
+      .page { padding-top: 20px; }
+      .page-heading { align-items: flex-start; flex-direction: column; }
+      .heading-actions { width: 100%; justify-content: space-between; }
+      .stats { gap: 9px; }
+      .stat { min-height: 111px; padding: 12px; }
+      .stat-value { font-size: 20px; }
+      .panel, .table-panel { padding: 13px; }
+      .table-toolbar { align-items: stretch; flex-direction: column; }
+      .table-search { width: 100%; }
+      .record-fields { grid-template-columns: minmax(0, 1fr); }
+      .record-field.full { grid-column: auto; }
+      .summary-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width: 390px) {
+      .top-actions .icon-button { display: none; }
+      .global-search { width: 39vw; }
+      .stat-top { font-size: 9px; }
+      .stat-foot { font-size: 9px; }
+      .table-footer { align-items: flex-start; flex-direction: column; }
+    }
+    :root {
+      --ink: #17382a;
+      --muted: #718278;
+      --green: #18744d;
+      --green-dark: #10583a;
+      --green-light: #e8f4ec;
+      --line: #e5ece7;
+      --canvas: #f4f7f5;
+      font-family: "Thaisarabun", sans-serif;
+    }
+    body { background: radial-gradient(ellipse at 80% -12%, #e4f1e8 0, transparent 38%), var(--canvas); }
+    .app { grid-template-columns: 258px minmax(0, 1fr); }
+    .sidebar {
+      background: linear-gradient(165deg, #124b35 0%, #153f30 48%, #103829 100%);
+      box-shadow: 8px 0 26px #123a2810;
+    }
+    .brand { padding-bottom: 34px; }
+    .brand-mark { border-radius: 13px; background: linear-gradient(145deg, #39a976, #23895c); box-shadow: 0 5px 14px #0b291c55; }
+    .nav-label { font-size: 11px; }
+    .nav button { min-height: 45px; padding: 12px 13px; border-radius: 10px; font-size: 13px; }
+    .nav button.active { background: linear-gradient(100deg, #2c714d, #245e42); box-shadow: inset 3px 0 #8bd5a7, 0 5px 14px #0b291c20; }
+    main { padding-right: clamp(24px, 4vw, 60px); padding-left: clamp(24px, 4vw, 60px); }
+    .topbar { position: sticky; z-index: 4; top: 0; min-height: 76px; border-bottom-color: #e1e9e3b8; background: #f4f7f5e8; backdrop-filter: blur(14px); }
+    .breadcrumb { font-size: 12px; }
+    .global-search { width: min(290px, 30vw); height: 40px; border-radius: 10px; font-size: 12px; }
+    .icon-button { width: 40px; height: 40px; border-radius: 10px; }
+    .page { padding-top: 30px; }
+    .page-heading { margin-bottom: 22px; }
+    h1 { font-size: clamp(25px, 2.4vw, 32px); letter-spacing: -.7px; }
+    .page-heading p { font-size: 13px; }
+    .dashboard-hero {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      min-height: 144px;
+      align-items: center;
+      margin-bottom: 19px;
+      padding: 26px 29px;
+      border: 1px solid #286647;
+      border-radius: 18px;
+      background: linear-gradient(112deg, #144b34 0%, #176443 55%, #218052 100%);
+      box-shadow: 0 12px 28px #164b321e;
+    }
+    .dashboard-hero::after {
+      position: absolute;
+      z-index: -1;
+      top: -115px;
+      right: 11%;
+      width: 300px;
+      height: 300px;
+      border: 1px solid #ffffff18;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #ffffff13 0 35%, transparent 36%);
+      box-shadow: 0 0 0 34px #ffffff08, 0 0 0 68px #ffffff06;
+      content: "";
+    }
+    .dashboard-hero h1 { margin-bottom: 8px; color: white; font-size: clamp(26px, 2.6vw, 34px); }
+    .dashboard-hero p { color: #d4e8db; font-size: 13px; }
+    .dashboard-hero .heading-actions { position: relative; z-index: 1; }
+    .dashboard-hero .date-label { color: #e5f1e9; font-size: 12px; }
+    .dashboard-hero .secondary-button { min-height: 40px; border-color: #ffffff50; background: #ffffff12; color: white; font-size: 12px; }
+    .dashboard-hero .secondary-button:hover { background: #ffffff24; }
+    .demo-banner { margin-bottom: 19px; padding: 12px 15px; border: 1px solid #d9e9dd; border-left: 3px solid #4b9b6a; border-radius: 10px; background: #eef6f0; color: #456d51; font-size: 12px; }
+    .stats { gap: 15px; margin-bottom: 19px; }
+    .card { border-color: #e4ebe6; border-radius: 15px; box-shadow: 0 5px 18px #1b3f2a08; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+    .stat { position: relative; min-height: 148px; overflow: hidden; padding: 20px; }
+    .stat::before { position: absolute; inset: 0 0 auto; height: 3px; background: linear-gradient(90deg, #2b8a5b, #9bcfad); content: ""; }
+    .stat:hover, .panel.card:hover, .table-panel.card:hover { transform: translateY(-2px); border-color: #d5e5d9; box-shadow: 0 10px 24px #1b3f2a10; }
+    .stat-top { color: #64776b; font-size: 12px; }
+    .stat-icon { width: 37px; height: 37px; border-radius: 11px; background: #edf6ef; color: #247b50; font-size: 17px; }
+    .stat-value { margin-top: 16px; font-size: clamp(23px, 2vw, 28px); letter-spacing: -.65px; }
+    .stat-foot { margin-top: 5px; color: #839188; font-size: 11px; }
+    .balance-toggle { width: 32px; height: 32px; border-radius: 9px; font-size: 16px; }
+    .balance-toggle:hover { background: #edf6ef; }
+    .two-col { gap: 18px; }
+    .panel, .table-panel { padding: 21px; }
+    .panel-heading { align-items: center; margin-bottom: 18px; }
+    .panel-heading h2 { font-size: 16px; letter-spacing: -.15px; }
+    .panel-heading p { margin-top: 5px; font-size: 11px; }
+    .select, .filter-input { min-height: 37px; padding: 0 11px; border-color: #e0e8e2; border-radius: 9px; font-size: 11px; }
+    .chart-total { margin: 5px 0 13px; font-size: 11px; }
+    .chart-total strong { font-size: 23px; }
+    .chart { height: 180px; gap: 12px; border-radius: 8px 8px 0 0; background: repeating-linear-gradient(to bottom, transparent 0 43px, #edf2ee 44px 45px); }
+    .bar { width: min(20px, 40%); border-radius: 5px 5px 0 0; }
+    .bar.income { background: linear-gradient(180deg, #57ad7a, #287b50); }
+    .bar:not(.income) { background: linear-gradient(180deg, #c5dfcb, #94c3a1); }
+    .axis { padding-top: 9px; font-size: 10px; }
+    .legend { margin-top: 12px; font-size: 10px; }
+    .quick-actions { gap: 9px; margin-top: 18px; }
+    .quick { min-height: 78px; border-radius: 10px; font-size: 11px; transition: background .15s, border-color .15s, transform .15s; }
+    .quick:hover { transform: translateY(-2px); }
+    .quick span { font-size: 20px; }
+    .status-box { margin-top: 19px; padding: 14px; border: 1px solid #eaf0eb; border-radius: 11px; background: #f6f9f6; }
+    .status-title { margin-bottom: 12px; font-size: 12px; }
+    .status-row { font-size: 11px; }
+    .table-panel { margin-top: 18px; }
+    .table-toolbar { margin-bottom: 15px; }
+    th { padding: 12px 11px; background: #f8faf8; color: #74847a; font-size: 10px; }
+    th:first-child { border-radius: 8px 0 0 0; }
+    th:last-child { border-radius: 0 8px 0 0; }
+    td { padding: 14px 11px; color: #4b6254; font-size: 11px; }
+    .row-title { font-size: 11px; }
+    .row-sub { font-size: 10px; }
+    .badge { padding: 5px 9px; font-size: 10px; font-weight: 600; }
+    .empty { padding: 30px; font-size: 12px; }
+    .table-footer { padding-top: 14px; font-size: 11px; }
+    .page-button { min-width: 32px; height: 32px; border-radius: 8px; font-size: 11px; }
+    .primary-button, .secondary-button { min-height: 39px; padding: 0 14px; border-radius: 9px; font-size: 12px; }
+    .summary-grid { gap: 15px; }
+    .summary-card { padding: 20px; }
+    .summary-card span { font-size: 12px; }
+    .summary-card strong { font-size: 23px; }
+    .toast { padding: 13px 17px; border-radius: 11px; font-size: 12px; }
+    button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid #89c99e;
+      outline-offset: 2px;
+    }
+    @media (max-width: 1050px) {
+      main { padding-right: 28px; padding-left: 28px; }
+      .dashboard-hero { padding: 23px; }
+    }
+    @media (max-width: 690px) {
+      .app { display: block; }
+      main { padding: 0 15px 30px; }
+      .topbar { min-height: 66px; }
+      .page { padding-top: 21px; }
+      .page-heading { gap: 14px; }
+      .dashboard-hero { min-height: auto; align-items: flex-start; padding: 22px 19px; }
+      .dashboard-hero .heading-actions { width: 100%; justify-content: space-between; }
+      .dashboard-hero h1 { font-size: 27px; }
+      .dashboard-hero p { font-size: 12px; line-height: 1.6; }
+      .stats { gap: 10px; }
+      .stat { min-height: 128px; padding: 15px; }
+      .stat-top { font-size: 11px; }
+      .stat-value { margin-top: 13px; font-size: 22px; }
+      .stat-foot { font-size: 10px; line-height: 1.4; }
+      .panel, .table-panel { padding: 15px; }
+      .chart { height: 155px; }
+      .summary-grid { gap: 10px; }
+      .summary-card { padding: 15px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="เมนูหลัก">
+      <div class="brand"><span class="brand-mark">฿</span><span>BankLite<span class="brand-caption">ระบบจัดการข้อมูลธนาคาร</span></span></div>
+      <div class="nav-label">เมนูระบบ</div>
+      <nav class="nav">
+        <button class="active" type="button" data-page="dashboard"><span class="nav-icon">▦</span>ภาพรวม</button>
+        <button type="button" data-page="accounts"><span class="nav-icon">▣</span>บัญชี</button>
+        <button type="button" data-page="customers"><span class="nav-icon">♙</span>ลูกค้า</button>
+        <button type="button" data-page="transactions"><span class="nav-icon">⇄</span>ธุรกรรม</button>
+        <button type="button" data-page="reports"><span class="nav-icon">▤</span>รายงานสรุป</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-user"><div class="avatar" id="staffAvatar">พน</div><div><div class="user-name" id="staffName">พนักงาน</div><div class="user-role" id="staffRole">เจ้าหน้าที่ธนาคาร</div></div></div>
+        <div class="sidebar-account"><span class="employee-code" id="staffCode"></span><form method="POST" action="/logout"><input type="hidden" name="_token" value="__BANKLITE_CSRF_TOKEN__"><button class="logout-button" type="submit">ออกจากระบบ</button></form></div>
+      </div>
+    </aside>
+    <div class="scrim" id="scrim"></div>
+
+    <main>
+      <header class="topbar">
+        <div class="breadcrumb"><button class="icon-button mobile-menu" id="menuButton" type="button" aria-label="เปิดเมนู" aria-expanded="false">☰</button><span>BankLite</span><span>›</span><strong id="breadcrumb">ภาพรวม</strong></div>
+        <div class="top-actions">
+          <label class="search-wrap"><input class="global-search" id="globalSearch" type="search" placeholder="ค้นหาข้อมูล..." aria-label="ค้นหาข้อมูล"><span class="sr-only"></span></label>
+          <button class="icon-button" type="button" id="helpButton" aria-label="วิธีใช้งาน" title="วิธีใช้งาน">?</button>
+        </div>
+      </header>
+
+      <section class="page active" id="page-dashboard" data-title="ภาพรวม">
+        <div class="page-heading dashboard-hero">
+          <div><h1>ภาพรวมระบบ</h1><p>ข้อมูลบัญชี ลูกค้า และธุรกรรมจากฐานข้อมูล MySQL</p></div>
+          <div class="heading-actions"><span class="date-label" id="today"></span><span class="date-label" id="dataStatus" role="status">กำลังเชื่อมต่อฐานข้อมูล...</span><button class="secondary-button" id="refreshButton" type="button">↻ &nbsp;รีเฟรชข้อมูล</button></div>
+        </div>
+        <div class="demo-banner">ⓘ &nbsp;ข้อมูลตัวอย่างสำหรับโครงงานนักศึกษา — ไม่ได้เชื่อมต่อกับบัญชีธนาคารจริง</div>
+        <div class="stats">
+          <article class="card stat"><div class="stat-top"><span>ลูกค้าทั้งหมด</span><span class="stat-icon">♙</span></div><div class="stat-value" id="customerCount">20 <small style="font-size:11px;font-weight:500">ราย</small></div><div class="stat-foot">รายชื่อลูกค้าตัวอย่าง</div></article>
+          <article class="card stat"><div class="stat-top"><span>บัญชีทั้งหมด</span><span class="stat-icon">▣</span></div><div class="stat-value" id="accountCount">20 <small style="font-size:11px;font-weight:500">บัญชี</small></div><div class="stat-foot">ออมทรัพย์และกระแสรายวัน</div></article>
+          <article class="card stat"><div class="stat-top"><span>ยอดเงินรวม</span><button class="balance-toggle" id="toggleBalance" type="button" aria-label="ซ่อนยอดเงิน" title="ซ่อนหรือแสดงยอดเงิน">◉</button></div><div class="stat-value" id="balance">—</div><div class="stat-foot">ยอดคงเหลือรวมทุกบัญชีตัวอย่าง</div></article>
+          <article class="card stat"><div class="stat-top"><span>ธุรกรรมทั้งหมด</span><span class="stat-icon">⇄</span></div><div class="stat-value" id="transactionCount">60 <small style="font-size:11px;font-weight:500">รายการ</small></div><div class="stat-foot">รายการฝากและถอนในระบบ</div></article>
+        </div>
+        <div class="two-col">
+          <section class="card panel">
+            <div class="panel-heading"><div><h2>สรุปรายการเงินเข้า–ออก</h2><p>ตัวอย่างยอดฝากและถอน แสดงเป็นรายสัปดาห์</p></div><select class="select" id="chartRange" aria-label="ช่วงเวลาของกราฟ"><option value="week">7 วันที่ผ่านมา</option><option value="all">ภาพรวมรายการ</option></select></div>
+            <div class="chart-total"><strong id="chartTotal">—</strong><span id="chartCaption">ยอดเงินเข้าจากข้อมูลตัวอย่าง</span></div>
+            <div class="chart" id="chart" role="img" aria-label="กราฟเปรียบเทียบยอดเงินฝากและถอน"></div>
+            <div class="axis" id="chartAxis"></div>
+            <div class="legend"><span><i class="dot"></i>เงินเข้า</span><span><i class="dot out"></i>เงินออก</span></div>
+          </section>
+          <section class="card panel">
+            <div class="panel-heading"><div><h2>ทางลัด</h2><p>เปิดเมนูที่ใช้งานบ่อย</p></div></div>
+            <div class="quick-actions">
+              <button class="quick" type="button" data-go="customers"><span>♙</span>รายชื่อลูกค้า</button>
+              <button class="quick" type="button" data-go="accounts"><span>▣</span>ดูบัญชี</button>
+              <button class="quick" type="button" data-go="transactions"><span>⇄</span>ดูธุรกรรม</button>
+            </div>
+            <div class="status-box"><div class="status-title">สถานะชุดข้อมูล</div><div class="status-row"><span>บัญชีใช้งาน</span><strong id="activeCount">20 บัญชี</strong></div><div class="status-row"><span>รายการสำเร็จ</span><strong id="completedCount">60 รายการ</strong></div><div class="status-row"><span>จำนวนข้อมูลตัวอย่าง</span><strong>100 เรคคอร์ด</strong></div></div>
+          </section>
+        </div>
+        <section class="card table-panel">
+          <div class="panel-heading"><div><h2>ธุรกรรมล่าสุด</h2><p>รายการตัวอย่างล่าสุด 5 รายการ</p></div><button class="secondary-button" type="button" data-go="transactions">ดูธุรกรรมทั้งหมด &nbsp;→</button></div>
+          <div class="table-wrap"><table><thead><tr><th>รายการ</th><th>ชื่อลูกค้า</th><th>เลขบัญชี</th><th>วันทำรายการ</th><th>จำนวนเงิน</th><th>สถานะ</th></tr></thead><tbody id="recentRows"></tbody></table><div class="empty" id="recentEmpty">ไม่พบรายการ</div></div>
+        </section>
+      </section>
+
+      <section class="page" id="page-accounts" data-title="บัญชี">
+        <div class="page-heading"><div><h1>จัดการบัญชี</h1><p>ตรวจสอบเลขบัญชี ประเภทบัญชี และยอดคงเหลือตัวอย่าง</p></div><div class="heading-actions"><span class="date-label">ทั้งหมด <strong id="accountPageCount">20</strong> บัญชี</span><button class="primary-button" type="button" data-add="account">＋ เพิ่มบัญชี</button></div></div>
+        <div class="demo-banner">ข้อมูลบัญชีใช้สำหรับการศึกษาและสาธิตการจัดการข้อมูลในโครงงานเท่านั้น</div>
+        <section class="card table-panel" style="margin-top:0">
+          <div class="table-toolbar"><div class="filters"><select class="filter-input" id="accountTypeFilter" aria-label="กรองประเภทบัญชี"><option value="">ทุกประเภทบัญชี</option><option value="savings">ออมทรัพย์</option><option value="current">กระแสรายวัน</option></select><select class="filter-input" id="accountStatusFilter" aria-label="กรองสถานะบัญชี"><option value="">ทุกสถานะ</option><option value="active">ใช้งาน</option></select></div><input class="filter-input table-search" id="accountSearch" type="search" placeholder="ค้นหาเลขบัญชี/ชื่อลูกค้า..." aria-label="ค้นหาบัญชี"></div>
+          <div class="table-wrap"><table><thead><tr><th>เลขบัญชี</th><th>เจ้าของบัญชี</th><th>ประเภท</th><th>วันที่เปิดบัญชี</th><th>ยอดคงเหลือ</th><th>สถานะ</th><th>จัดการ</th></tr></thead><tbody id="accountRows"></tbody></table><div class="empty" id="accountEmpty">ไม่พบบัญชีที่ตรงกับการค้นหา</div></div>
+          <div class="table-footer"><span id="accountResultCount"></span><div class="filters"><label class="date-label">ต่อหน้า <select class="filter-input page-size" data-size-key="account" aria-label="จำนวนบัญชีต่อหน้า"><option value="10">10</option><option value="20">20</option><option value="50">50</option></select></label><div class="pagination" id="accountPagination"></div></div></div>
+        </section>
+      </section>
+
+      <section class="page" id="page-customers" data-title="ลูกค้า">
+        <div class="page-heading"><div><h1>ข้อมูลลูกค้า</h1><p>ค้นหารายชื่อลูกค้าและข้อมูลติดต่อสำหรับชุดข้อมูลตัวอย่าง</p></div><div class="heading-actions"><span class="date-label">ทั้งหมด <strong id="customerPageCount">20</strong> ราย</span><button class="primary-button" type="button" data-add="customer">＋ เพิ่มลูกค้า</button></div></div>
+        <div class="demo-banner">ชื่อ เบอร์โทรศัพท์ และอีเมลในหน้านี้เป็นข้อมูลทดสอบสมมติ ไม่ใช่ข้อมูลลูกค้าจริง</div>
+        <section class="card table-panel" style="margin-top:0">
+          <div class="table-toolbar"><span class="date-label">ค้นหาด้วยรหัส ชื่อ อีเมล หรือเบอร์โทรศัพท์</span><input class="filter-input table-search" id="customerSearch" type="search" placeholder="พิมพ์เพื่อค้นหาลูกค้า..." aria-label="ค้นหาลูกค้า"></div>
+          <div class="table-wrap"><table><thead><tr><th>รหัสลูกค้า</th><th>ชื่อลูกค้า</th><th>อีเมล</th><th>เบอร์โทรศัพท์</th><th>จำนวนบัญชี</th><th>จัดการ</th></tr></thead><tbody id="customerRows"></tbody></table><div class="empty" id="customerEmpty">ไม่พบลูกค้าที่ตรงกับการค้นหา</div></div>
+          <div class="table-footer"><span id="customerResultCount"></span><div class="filters"><label class="date-label">ต่อหน้า <select class="filter-input page-size" data-size-key="customer" aria-label="จำนวนลูกค้าต่อหน้า"><option value="10">10</option><option value="20">20</option><option value="50">50</option></select></label><div class="pagination" id="customerPagination"></div></div></div>
+        </section>
+      </section>
+
+      <section class="page" id="page-transactions" data-title="ธุรกรรม">
+        <div class="page-heading"><div><h1>ประวัติธุรกรรม</h1><p>ค้นหาและกรองรายการฝาก–ถอนตัวอย่าง</p></div><div class="heading-actions"><button class="primary-button" type="button" data-add="transaction">＋ เพิ่มธุรกรรม</button><button class="secondary-button" id="exportButton" type="button">⇩ &nbsp;ส่งออก CSV</button></div></div>
+        <div class="demo-banner">รายการธุรกรรมใช้สำหรับการศึกษา และไม่ได้เกิดขึ้นในบัญชีธนาคารจริง</div>
+        <section class="card table-panel" style="margin-top:0">
+          <div class="table-toolbar"><div class="filters"><select class="filter-input" id="transactionTypeFilter" aria-label="กรองประเภทธุรกรรม"><option value="">ทุกประเภทธุรกรรม</option><option value="deposit">ฝากเงิน</option><option value="withdrawal">ถอนเงิน</option></select><select class="filter-input" id="transactionSort" aria-label="เรียงรายการ"><option value="newest">ใหม่ไปเก่า</option><option value="oldest">เก่าไปใหม่</option><option value="amount">จำนวนเงินมากไปน้อย</option></select></div><input class="filter-input table-search" id="transactionSearch" type="search" placeholder="ค้นหาเลขอ้างอิง/บัญชี..." aria-label="ค้นหาธุรกรรม"></div>
+          <div class="table-wrap"><table><thead><tr><th>เลขอ้างอิง</th><th>ประเภท</th><th>ชื่อลูกค้า</th><th>เลขบัญชี</th><th>วันทำรายการ</th><th>รายละเอียด</th><th>จำนวนเงิน</th><th>สถานะ</th><th>จัดการ</th></tr></thead><tbody id="transactionRows"></tbody></table><div class="empty" id="transactionEmpty">ไม่พบธุรกรรมที่ตรงกับการค้นหา</div></div>
+          <div class="table-footer"><span id="transactionResultCount"></span><div class="filters"><label class="date-label">ต่อหน้า <select class="filter-input page-size" data-size-key="transaction" aria-label="จำนวนธุรกรรมต่อหน้า"><option value="10">10</option><option value="20">20</option><option value="50">50</option></select></label><div class="pagination" id="transactionPagination"></div></div></div>
+        </section>
+      </section>
+
+      <section class="page" id="page-reports" data-title="รายงานสรุป">
+        <div class="page-heading"><div><h1>รายงานสรุป</h1><p>ภาพรวมข้อมูลจากชุดข้อมูลโครงงานใน MySQL</p></div><button class="secondary-button" type="button" data-go="transactions">ดูรายการธุรกรรม &nbsp;→</button></div>
+        <div class="demo-banner">ค่าสรุปคำนวณจากข้อมูลตัวอย่างที่แสดงในหน้านี้</div>
+        <div class="summary-grid">
+          <article class="card summary-card"><span>จำนวนลูกค้า</span><strong id="reportCustomers">20 ราย</strong></article>
+          <article class="card summary-card"><span>บัญชีออมทรัพย์</span><strong id="reportSavings">16 บัญชี</strong></article>
+          <article class="card summary-card"><span>บัญชีกระแสรายวัน</span><strong id="reportCurrent">4 บัญชี</strong></article>
+          <article class="card summary-card"><span>ยอดเงินเข้า</span><strong id="reportDeposits">—</strong></article>
+          <article class="card summary-card"><span>ยอดเงินออก</span><strong id="reportWithdrawals">—</strong></article>
+          <article class="card summary-card"><span>ยอดคงเหลือ</span><strong id="reportBalance">—</strong></article>
+        </div>
+      </section>
+
+    </main>
+  </div>
+  <dialog class="record-dialog" id="recordDialog" aria-labelledby="recordDialogTitle">
+    <form class="record-form" id="recordForm">
+      <h2 id="recordDialogTitle"></h2>
+      <p id="recordDialogDescription"></p>
+      <div class="record-fields" id="recordFields"></div>
+      <div class="record-error" id="recordFormError" role="alert"></div>
+      <div class="record-actions">
+        <button class="secondary-button" type="button" id="cancelRecord">ยกเลิก</button>
+        <button class="primary-button" type="submit" id="saveRecord">บันทึกข้อมูล</button>
+      </div>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const money = (amount) => new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(amount);
+    const formatDate = (date) => new Intl.DateTimeFormat('th-TH', { dateStyle: 'medium' }).format(date);
+    const today = new Date();
+    let customers = [];
+    let accounts = [];
+    let transactions = [];
+    let totals = { balance: 0, deposits: 0, withdrawals: 0 };
+    const pageSizes = { account: 10, customer: 10, transaction: 10 };
+    const pageNumbers = { account: 1, customer: 1, transaction: 1 };
+    let balanceVisible = true;
+    let toastTimer;
+
+    const showToast = (message) => {
+      const toast = document.querySelector('#toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+    };
+    const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[character]);
+    async function loadDashboardData(showSuccessToast = false) {
+      const status = document.querySelector('#dataStatus');
+      const refreshButton = document.querySelector('#refreshButton');
+      status.textContent = 'กำลังเชื่อมต่อฐานข้อมูล...';
+      refreshButton.disabled = true;
+
+      try {
+        const response = await fetch('/api/dashboard', { headers: { Accept: 'application/json' } });
+        if (response.status === 401) {
+          window.location.assign('/login');
+          return;
+        }
+        if (!response.ok) throw new Error(`Dashboard API returned HTTP ${response.status}`);
+        const data = await response.json();
+        if (!data.staff || !Array.isArray(data.customers) || !Array.isArray(data.accounts) || !Array.isArray(data.transactions)) {
+          throw new Error('Dashboard API returned an invalid data format');
+        }
+
+        document.querySelector('#staffName').textContent = data.staff.name;
+        document.querySelector('#staffRole').textContent = data.staff.position;
+        document.querySelector('#staffCode').textContent = data.staff.employeeCode;
+        document.querySelector('#staffAvatar').textContent = Array.from(data.staff.name).slice(0, 2).join('');
+        customers = data.customers;
+        accounts = data.accounts.map((account) => ({
+          ...account,
+          opened: new Date(`${account.opened}T00:00:00`)
+        }));
+        transactions = data.transactions.map((transaction) => ({
+          ...transaction,
+          date: new Date(transaction.date.replace(' ', 'T'))
+        }));
+        totals = {
+          balance: accounts.reduce((sum, account) => sum + account.balance, 0),
+          deposits: transactions.filter((transaction) => transaction.status === 'completed' && transaction.type === 'deposit').reduce((sum, transaction) => sum + transaction.amount, 0),
+          withdrawals: transactions.filter((transaction) => transaction.status === 'completed' && transaction.type === 'withdrawal').reduce((sum, transaction) => sum + transaction.amount, 0)
+        };
+
+        renderTopSummary();
+        renderChart();
+        renderRecent();
+        renderTables();
+        status.textContent = 'ข้อมูลเชื่อมต่อจาก MySQL';
+        if (showSuccessToast) showToast('อัปเดตข้อมูลจาก MySQL เรียบร้อย');
+      } catch (error) {
+        console.error('Unable to load BankLite data from Laravel/MySQL.', error);
+        status.textContent = 'โหลดข้อมูลจาก MySQL ไม่สำเร็จ';
+        showToast('เชื่อมต่อไม่ได้ ตรวจสอบว่า Laravel และ MySQL กำลังทำงาน');
+      } finally {
+        refreshButton.disabled = false;
+      }
+    }
+    const rowMarkup = (items, rowBuilder) => items.map(rowBuilder).join('');
+    const paginationMarkup = (key, totalPages) => {
+      if (totalPages < 2) return '';
+      const current = pageNumbers[key];
+      const start = Math.max(1, Math.min(current - 2, totalPages - 4));
+      const end = Math.min(totalPages, start + 4);
+      const buttons = [`<button class="page-button" data-page-key="${key}" data-page-value="${current - 1}" aria-label="หน้าก่อนหน้า" ${current === 1 ? 'disabled' : ''}>‹</button>`];
+      for (let page = start; page <= end; page++) {
+        buttons.push(`<button class="page-button ${page === current ? 'active' : ''}" data-page-key="${key}" data-page-value="${page}">${page}</button>`);
+      }
+      buttons.push(`<button class="page-button" data-page-key="${key}" data-page-value="${current + 1}" aria-label="หน้าถัดไป" ${current === totalPages ? 'disabled' : ''}>›</button>`);
+      return buttons.join('');
+    };
+    const paginate = (items, key) => {
+      const size = pageSizes[key];
+      const totalPages = Math.max(1, Math.ceil(items.length / size));
+      pageNumbers[key] = Math.min(pageNumbers[key], totalPages);
+      const start = (pageNumbers[key] - 1) * size;
+      return { items: items.slice(start, start + size), totalPages, start, end: Math.min(start + size, items.length) };
+    };
+    const attachPagination = () => {
+      document.querySelectorAll('[data-page-key]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const key = button.dataset.pageKey;
+          pageNumbers[key] = Number(button.dataset.pageValue);
+          renderTables();
+        });
+      });
+    };
+
+    function formatDateInput(value) {
+      if (!value) return '';
+      if (value instanceof Date) {
+        const pad = (part) => String(part).padStart(2, '0');
+        return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}`;
+      }
+      return String(value).slice(0, 10);
+    }
+
+    function formatDateTimeInput(value) {
+      const date = value instanceof Date ? value : new Date(String(value).replace(' ', 'T'));
+      const pad = (part) => String(part).padStart(2, '0');
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function openRecordForm(kind, record = null) {
+      const customerOptions = customers.map((customer) => ({
+        value: customer.number,
+        label: `${customer.code} — ${customer.name}`
+      }));
+      const accountOptions = accounts.filter((account) =>
+        account.status === 'active' || account.id === record?.account?.id
+      ).map((account) => ({
+        value: account.id,
+        label: `${account.number} — ${account.customer.name}`
+      }));
+      const fields = {
+        customer: [
+          { name: 'customer_code', label: 'รหัสลูกค้า', required: true, value: record?.code },
+          { name: 'first_name', label: 'ชื่อ', required: true, value: record?.firstName },
+          { name: 'last_name', label: 'นามสกุล', required: true, value: record?.lastName },
+          { name: 'email', label: 'อีเมล', type: 'email', required: true, value: record?.email },
+          { name: 'phone', label: 'เบอร์โทรศัพท์', required: true, value: record?.phone },
+          { name: 'birth_date', label: 'วันเกิด', type: 'date', value: record?.birthDate, full: true }
+        ],
+        account: [
+          { name: 'customer_id', label: 'เจ้าของบัญชี', type: 'select', required: true, value: record?.customer?.number, options: customerOptions, full: true },
+          { name: 'account_number', label: 'เลขบัญชี', required: true, value: record?.number },
+          { name: 'account_type', label: 'ประเภทบัญชี', type: 'select', required: true, value: record?.type, options: [{ value: 'savings', label: 'ออมทรัพย์' }, { value: 'current', label: 'กระแสรายวัน' }] },
+          { name: 'balance', label: 'ยอดคงเหลือ (บาท)', type: 'number', step: '0.01', min: '0', required: true, value: record?.balance ?? '0.00' },
+          { name: 'status', label: 'สถานะบัญชี', type: 'select', required: true, value: record?.status ?? 'active', options: [{ value: 'active', label: 'ใช้งาน' }, { value: 'inactive', label: 'ไม่ใช้งาน' }] },
+          { name: 'opened_at', label: 'วันที่เปิดบัญชี', type: 'date', required: true, value: record?.opened, full: true }
+        ],
+        transaction: [
+          { name: 'account_id', label: 'บัญชี', type: 'select', required: true, value: record?.account?.id, options: accountOptions, full: true },
+          { name: 'transaction_type', label: 'ประเภทธุรกรรม', type: 'select', required: true, value: record?.type ?? 'deposit', options: [{ value: 'deposit', label: 'ฝากเงิน' }, { value: 'withdrawal', label: 'ถอนเงิน' }] },
+          { name: 'amount', label: 'จำนวนเงิน (บาท)', type: 'number', step: '0.01', min: '0.01', required: true, value: record?.amount },
+          { name: 'transaction_date', label: 'วันและเวลาทำรายการ', type: 'datetime-local', required: true, value: record?.date ? formatDateTimeInput(record.date) : formatDateTimeInput(new Date()), full: true },
+          { name: 'description', label: 'รายละเอียด', type: 'textarea', value: record?.description ?? '', full: true }
+        ]
+      }[kind];
+
+      if (!fields) return;
+
+      const title = `${record ? 'แก้ไข' : 'เพิ่ม'}${kind === 'customer' ? 'ข้อมูลลูกค้า' : kind === 'account' ? 'บัญชี' : 'ธุรกรรม'}`;
+      const dialog = document.querySelector('#recordDialog');
+      document.querySelector('#recordDialogTitle').textContent = title;
+      document.querySelector('#recordDialogDescription').textContent = kind === 'transaction'
+        ? 'บันทึกเป็นรายการสำเร็จ และระบบจะปรับยอดคงเหลือของบัญชีให้โดยอัตโนมัติ'
+        : 'กรอกข้อมูลให้ครบถ้วนก่อนบันทึก';
+      document.querySelector('#recordFormError').textContent = '';
+      document.querySelector('#recordForm').dataset.endpoint = `/api/${kind === 'customer' ? 'customers' : kind === 'account' ? 'accounts' : 'transactions'}${record ? `/${record.id ?? record.number}` : ''}`;
+      document.querySelector('#recordForm').dataset.method = record ? 'PUT' : 'POST';
+      document.querySelector('#recordFields').innerHTML = fields.map((field) => {
+        const value = field.type === 'date' ? formatDateInput(field.value) : field.value ?? '';
+        const required = field.required ? ' required' : '';
+        const common = `id="${escapeHtml(field.name)}" name="${escapeHtml(field.name)}"${required}`;
+        let control;
+
+        if (field.type === 'select') {
+          const options = field.options.map((option) =>
+            `<option value="${escapeHtml(option.value)}"${String(option.value) === String(value) ? ' selected' : ''}>${escapeHtml(option.label)}</option>`
+          ).join('');
+          control = `<select ${common}>${options}</select>`;
+        } else if (field.type === 'textarea') {
+          control = `<textarea ${common}>${escapeHtml(value)}</textarea>`;
+        } else {
+          const type = field.type ?? 'text';
+          const attributes = `${field.step ? ` step="${field.step}"` : ''}${field.min ? ` min="${field.min}"` : ''}`;
+          control = `<input ${common} type="${type}" value="${escapeHtml(value)}"${attributes}>`;
+        }
+
+        return `<label class="record-field${field.full ? ' full' : ''}" for="${escapeHtml(field.name)}">${escapeHtml(field.label)}${control}</label>`;
+      }).join('');
+      dialog.showModal();
+    }
+
+    document.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-add], [data-edit], [data-delete]');
+      if (!button) return;
+      if (button.dataset.add) {
+        openRecordForm(button.dataset.add);
+        return;
+      }
+
+      if (button.dataset.delete) {
+        void deleteRecord(button.dataset.delete, button.dataset.id, button);
+        return;
+      }
+
+      const collections = { customer: customers, account: accounts, transaction: transactions };
+      const record = collections[button.dataset.edit]?.find((item) =>
+        String(item.id ?? item.number) === button.dataset.id
+      );
+      if (record) openRecordForm(button.dataset.edit, record);
+    });
+
+    async function deleteRecord(kind, id, button) {
+      const labels = {
+        customer: 'ลูกค้ารวมถึงบัญชี/ธุรกรรมที่เกี่ยวข้อง',
+        account: 'บัญชีพร้อมประวัติธุรกรรมที่เกี่ยวข้อง',
+        transaction: 'รายการธุรกรรม'
+      };
+      if (!window.confirm(`ยืนยันลบ${labels[kind]}หรือไม่? การลบไม่สามารถย้อนกลับได้`)) return;
+
+      button.disabled = true;
+      try {
+        const endpoint = `/api/${kind === 'customer' ? 'customers' : kind === 'account' ? 'accounts' : 'transactions'}/${id}`;
+        const csrfToken = document.querySelector('form[action="/logout"] input[name="_token"]').value;
+        const response = await fetch(endpoint, {
+          method: 'DELETE',
+          headers: { Accept: 'application/json', 'X-CSRF-TOKEN': csrfToken }
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.message || `ลบข้อมูลไม่สำเร็จ (HTTP ${response.status})`);
+        }
+
+        await loadDashboardData();
+        showToast(result.message);
+      } catch (requestError) {
+        console.error('Unable to delete BankLite record.', requestError);
+        showToast(requestError.message || 'ลบข้อมูลไม่สำเร็จ กรุณาลองอีกครั้ง');
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    document.querySelector('#cancelRecord').addEventListener('click', () => {
+      document.querySelector('#recordDialog').close();
+    });
+    document.querySelector('#recordForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const saveButton = document.querySelector('#saveRecord');
+      const error = document.querySelector('#recordFormError');
+      saveButton.disabled = true;
+      error.textContent = '';
+
+      try {
+        const csrfToken = document.querySelector('form[action="/logout"] input[name="_token"]').value;
+        const response = await fetch(form.dataset.endpoint, {
+          method: form.dataset.method,
+          headers: { Accept: 'application/json', 'X-CSRF-TOKEN': csrfToken },
+          body: new FormData(form)
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          const validationMessages = Object.values(result.errors ?? {}).flat();
+          throw new Error(validationMessages.join(' ') || result.message || `บันทึกข้อมูลไม่สำเร็จ (HTTP ${response.status})`);
+        }
+
+        document.querySelector('#recordDialog').close();
+        await loadDashboardData();
+        showToast(result.message);
+      } catch (requestError) {
+        console.error('Unable to save BankLite record.', requestError);
+        error.textContent = requestError.message || 'บันทึกข้อมูลไม่สำเร็จ กรุณาลองอีกครั้ง';
+      } finally {
+        saveButton.disabled = false;
+      }
+    });
+
+    function renderTopSummary() {
+      document.querySelector('#customerCount').innerHTML = `${customers.length} <small style="font-size:11px;font-weight:500">ราย</small>`;
+      document.querySelector('#accountCount').innerHTML = `${accounts.length} <small style="font-size:11px;font-weight:500">บัญชี</small>`;
+      document.querySelector('#transactionCount').innerHTML = `${transactions.length} <small style="font-size:11px;font-weight:500">รายการ</small>`;
+      document.querySelector('#balance').textContent = balanceVisible ? money(totals.balance) : '฿ •••,•••.••';
+      document.querySelector('#toggleBalance').setAttribute('aria-label', balanceVisible ? 'ซ่อนยอดเงิน' : 'แสดงยอดเงิน');
+      document.querySelector('#activeCount').textContent = `${accounts.filter((account) => account.status === 'active').length} บัญชี`;
+      document.querySelector('#completedCount').textContent = `${transactions.filter((transaction) => transaction.status === 'completed').length} รายการ`;
+      document.querySelector('#chartTotal').textContent = money(totals.deposits);
+      document.querySelector('#reportCustomers').textContent = `${customers.length} ราย`;
+      document.querySelector('#reportSavings').textContent = `${accounts.filter((account) => account.type === 'savings').length} บัญชี`;
+      document.querySelector('#reportCurrent').textContent = `${accounts.filter((account) => account.type === 'current').length} บัญชี`;
+      document.querySelector('#reportDeposits').textContent = money(totals.deposits);
+      document.querySelector('#reportWithdrawals').textContent = money(totals.withdrawals);
+      document.querySelector('#reportBalance').textContent = money(totals.balance);
+      document.querySelector('#accountPageCount').textContent = accounts.length;
+      document.querySelector('#customerPageCount').textContent = customers.length;
+    }
+
+    function renderChart() {
+      const range = document.querySelector('#chartRange').value;
+      const labels = range === 'week' ? ['จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.', 'อา.'] : ['ฝาก', 'ถอน', 'รวม'];
+      const weekDates = Array.from({ length: 7 }, (_, index) => {
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
+        date.setDate(date.getDate() - (6 - index));
+        return date;
+      });
+      const deposits = range === 'week'
+        ? weekDates.map((date) => transactions.filter((transaction) => transaction.status === 'completed' && transaction.type === 'deposit' && transaction.date.toDateString() === date.toDateString()).reduce((sum, transaction) => sum + transaction.amount, 0))
+        : [totals.deposits, 0, totals.deposits];
+      const withdrawals = range === 'week'
+        ? weekDates.map((date) => transactions.filter((transaction) => transaction.status === 'completed' && transaction.type === 'withdrawal' && transaction.date.toDateString() === date.toDateString()).reduce((sum, transaction) => sum + transaction.amount, 0))
+        : [0, totals.withdrawals, totals.withdrawals];
+      const dayLabels = weekDates.map((date) => new Intl.DateTimeFormat('th-TH', { weekday: 'short' }).format(date));
+      const axisLabels = range === 'week' ? dayLabels : labels;
+      const max = Math.max(1, ...deposits, ...withdrawals);
+      document.querySelector('#chart').innerHTML = labels.map((label, index) => {
+        const incomeHeight = Math.max(5, (deposits[index] / max) * 93);
+        const outcomeHeight = Math.max(5, (withdrawals[index] / max) * 93);
+        return `<div class="bar-group" title="${label}: เข้า ${money(deposits[index])} / ออก ${money(withdrawals[index])}"><i class="bar income" style="height:${incomeHeight}%"></i><i class="bar" style="height:${outcomeHeight}%"></i></div>`;
+      }).join('');
+      document.querySelector('#chartAxis').innerHTML = axisLabels.map((label) => `<span>${label}</span>`).join('');
+      document.querySelector('#chartCaption').textContent = range === 'week' ? 'ยอดเงินเข้าจากข้อมูลในฐานข้อมูล' : 'ยอดเงินเข้ารวมจากรายการทั้งหมด';
+    }
+
+    function renderRecent() {
+      const recent = [...transactions].sort((a, b) => b.date - a.date || b.code.localeCompare(a.code)).slice(0, 5);
+      document.querySelector('#recentRows').innerHTML = rowMarkup(recent, (transaction) => `<tr><td><span class="row-title">${transaction.type === 'deposit' ? 'ฝากเงิน' : 'ถอนเงิน'}</span><span class="row-sub">${escapeHtml(transaction.code)}</span></td><td>${escapeHtml(transaction.account.customer.name)}</td><td>${escapeHtml(transaction.account.number)}</td><td>${formatDate(transaction.date)}</td><td class="${transaction.type === 'deposit' ? 'amount-in' : 'amount-out'}">${transaction.type === 'deposit' ? '+' : '−'} ${money(transaction.amount)}</td><td><span class="badge">${transaction.status === 'completed' ? 'สำเร็จ' : escapeHtml(transaction.status)}</span></td></tr>`);
+    }
+
+    function renderAccounts() {
+      const query = document.querySelector('#accountSearch').value.trim().toLowerCase();
+      const type = document.querySelector('#accountTypeFilter').value;
+      const status = document.querySelector('#accountStatusFilter').value;
+      const filtered = accounts.filter((account) => (!type || account.type === type) && (!status || account.status === status) &&
+        `${account.number} ${account.customer.code} ${account.customer.name}`.toLowerCase().includes(query));
+      const page = paginate(filtered, 'account');
+      document.querySelector('#accountRows').innerHTML = rowMarkup(page.items, (account) => `<tr><td><span class="row-title">${escapeHtml(account.number)}</span></td><td><span class="row-title">${escapeHtml(account.customer.name)}</span><span class="row-sub">${escapeHtml(account.customer.code)}</span></td><td>${account.type === 'savings' ? 'ออมทรัพย์' : 'กระแสรายวัน'}</td><td>${formatDate(account.opened)}</td><td class="amount-in">${money(account.balance)}</td><td><span class="badge">${account.status === 'active' ? 'ใช้งาน' : 'ไม่ใช้งาน'}</span></td><td><div class="row-actions"><button class="row-action" type="button" data-edit="account" data-id="${account.id}">แก้ไข</button><button class="row-action danger" type="button" data-delete="account" data-id="${account.id}">ลบ</button></div></td></tr>`);
+      document.querySelector('#accountEmpty').style.display = filtered.length ? 'none' : 'block';
+      document.querySelector('#accountResultCount').textContent = `แสดง ${filtered.length ? page.start + 1 : 0}–${page.end} จาก ${filtered.length} บัญชี`;
+      document.querySelector('#accountPagination').innerHTML = paginationMarkup('account', page.totalPages);
+    }
+
+    function renderCustomers() {
+      const query = document.querySelector('#customerSearch').value.trim().toLowerCase();
+      const filtered = customers.filter((customer) => `${customer.code} ${customer.name} ${customer.email} ${customer.phone}`.toLowerCase().includes(query));
+      const page = paginate(filtered, 'customer');
+      document.querySelector('#customerRows').innerHTML = rowMarkup(page.items, (customer) => `<tr><td><span class="row-title">${escapeHtml(customer.code)}</span></td><td><span class="row-title">${escapeHtml(customer.name)}</span></td><td>${escapeHtml(customer.email)}</td><td>${escapeHtml(customer.phone)}</td><td>${accounts.filter((account) => account.customer.number === customer.number).length} บัญชี</td><td><div class="row-actions"><button class="row-action" type="button" data-edit="customer" data-id="${customer.number}">แก้ไข</button><button class="row-action danger" type="button" data-delete="customer" data-id="${customer.number}">ลบ</button></div></td></tr>`);
+      document.querySelector('#customerEmpty').style.display = filtered.length ? 'none' : 'block';
+      document.querySelector('#customerResultCount').textContent = `แสดง ${filtered.length ? page.start + 1 : 0}–${page.end} จาก ${filtered.length} ราย`;
+      document.querySelector('#customerPagination').innerHTML = paginationMarkup('customer', page.totalPages);
+    }
+
+    function getFilteredTransactions() {
+      const query = document.querySelector('#transactionSearch').value.trim().toLowerCase();
+      const type = document.querySelector('#transactionTypeFilter').value;
+      const sort = document.querySelector('#transactionSort').value;
+      const filtered = transactions.filter((transaction) => (!type || transaction.type === type) &&
+        `${transaction.code} ${transaction.account.customer.name} ${transaction.account.number} ${transaction.description}`.toLowerCase().includes(query));
+      if (sort === 'amount') filtered.sort((a, b) => b.amount - a.amount);
+      else filtered.sort((a, b) => sort === 'newest' ? b.date - a.date || b.code.localeCompare(a.code) : a.date - b.date || a.code.localeCompare(b.code));
+      return filtered;
+    }
+
+    function renderTransactions() {
+      const filtered = getFilteredTransactions();
+      const page = paginate(filtered, 'transaction');
+      document.querySelector('#transactionRows').innerHTML = rowMarkup(page.items, (transaction) => `<tr><td><span class="row-title">${escapeHtml(transaction.code)}</span></td><td>${transaction.type === 'deposit' ? 'ฝากเงิน' : 'ถอนเงิน'}</td><td>${escapeHtml(transaction.account.customer.name)}</td><td>${escapeHtml(transaction.account.number)}</td><td>${formatDate(transaction.date)}</td><td>${escapeHtml(transaction.description)}</td><td class="${transaction.type === 'deposit' ? 'amount-in' : 'amount-out'}">${transaction.type === 'deposit' ? '+' : '−'} ${money(transaction.amount)}</td><td><span class="badge">${transaction.status === 'completed' ? 'สำเร็จ' : escapeHtml(transaction.status)}</span></td><td><div class="row-actions"><button class="row-action" type="button" data-edit="transaction" data-id="${transaction.id}">แก้ไข</button><button class="row-action danger" type="button" data-delete="transaction" data-id="${transaction.id}">ลบ</button></div></td></tr>`);
+      document.querySelector('#transactionEmpty').style.display = filtered.length ? 'none' : 'block';
+      document.querySelector('#transactionResultCount').textContent = `แสดง ${filtered.length ? page.start + 1 : 0}–${page.end} จาก ${filtered.length} รายการ`;
+      document.querySelector('#transactionPagination').innerHTML = paginationMarkup('transaction', page.totalPages);
+    }
+
+    function renderTables() {
+      renderAccounts();
+      renderCustomers();
+      renderTransactions();
+      attachPagination();
+    }
+
+    function navigate(pageName) {
+      const page = document.querySelector(`#page-${pageName}`);
+      if (!page) return;
+      document.querySelectorAll('.page').forEach((item) => item.classList.toggle('active', item === page));
+      document.querySelectorAll('.nav button[data-page]').forEach((item) => item.classList.toggle('active', item.dataset.page === pageName));
+      document.querySelector('#breadcrumb').textContent = page.dataset.title;
+      document.body.classList.remove('menu-open');
+      document.querySelector('#menuButton').setAttribute('aria-expanded', 'false');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.querySelectorAll('.nav button[data-page], [data-go]').forEach((button) => {
+      button.addEventListener('click', () => navigate(button.dataset.page || button.dataset.go));
+    });
+    document.querySelector('#toggleBalance').addEventListener('click', () => {
+      balanceVisible = !balanceVisible;
+      renderTopSummary();
+    });
+    document.querySelector('#chartRange').addEventListener('change', renderChart);
+    document.querySelector('#refreshButton').addEventListener('click', () => { void loadDashboardData(true); });
+    document.querySelector('#accountSearch').addEventListener('input', () => { pageNumbers.account = 1; renderTables(); });
+    document.querySelector('#accountTypeFilter').addEventListener('change', () => { pageNumbers.account = 1; renderTables(); });
+    document.querySelector('#accountStatusFilter').addEventListener('change', () => { pageNumbers.account = 1; renderTables(); });
+    document.querySelector('#customerSearch').addEventListener('input', () => { pageNumbers.customer = 1; renderTables(); });
+    document.querySelector('#transactionSearch').addEventListener('input', () => { pageNumbers.transaction = 1; renderTables(); });
+    document.querySelector('#transactionTypeFilter').addEventListener('change', () => { pageNumbers.transaction = 1; renderTables(); });
+    document.querySelector('#transactionSort').addEventListener('change', () => { pageNumbers.transaction = 1; renderTables(); });
+    document.querySelectorAll('.page-size').forEach((select) => {
+      select.addEventListener('change', () => {
+        pageSizes[select.dataset.sizeKey] = Number(select.value);
+        pageNumbers[select.dataset.sizeKey] = 1;
+        renderTables();
+      });
+    });
+    document.querySelector('#globalSearch').addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter') return;
+      const query = event.currentTarget.value.trim();
+      if (!query) return;
+      const normalizedQuery = query.toLowerCase();
+      const matchingCustomer = customers.some((customer) => `${customer.code} ${customer.name} ${customer.email} ${customer.phone}`.toLowerCase().includes(normalizedQuery));
+      const matchingAccount = accounts.some((account) => `${account.number} ${account.customer.code} ${account.customer.name}`.toLowerCase().includes(normalizedQuery));
+      if (matchingCustomer) {
+        document.querySelector('#customerSearch').value = query;
+        pageNumbers.customer = 1;
+        renderTables();
+        navigate('customers');
+      } else if (matchingAccount) {
+        document.querySelector('#accountSearch').value = query;
+        pageNumbers.account = 1;
+        renderTables();
+        navigate('accounts');
+      } else {
+        document.querySelector('#transactionSearch').value = query;
+        pageNumbers.transaction = 1;
+        renderTables();
+        navigate('transactions');
+      }
+    });
+    document.querySelector('#exportButton').addEventListener('click', () => {
+      const rows = getFilteredTransactions();
+      const escape = (value) => `"${String(value).replaceAll('"', '""')}"`;
+      const csv = [['เลขอ้างอิง', 'ประเภท', 'ชื่อลูกค้า', 'เลขบัญชี', 'วันที่', 'รายละเอียด', 'จำนวนเงิน', 'สถานะ'],
+        ...rows.map((transaction) => [transaction.code, transaction.type === 'deposit' ? 'ฝากเงิน' : 'ถอนเงิน', transaction.account.customer.name, transaction.account.number, formatDate(transaction.date), transaction.description, transaction.amount.toFixed(2), 'สำเร็จ'])]
+        .map((row) => row.map(escape).join(',')).join('\r\n');
+      const blob = new Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'banklite-transactions.csv';
+      link.click();
+      URL.revokeObjectURL(url);
+      showToast(`ส่งออกข้อมูล ${rows.length} รายการแล้ว`);
+    });
+    document.querySelector('#helpButton').addEventListener('click', () => {
+      showToast('ค้นหาจากช่องด้านบน หรือใช้เมนูเพื่อเปิดบัญชี ลูกค้า และธุรกรรม');
+    });
+    document.querySelector('#menuButton').addEventListener('click', () => {
+      const opened = document.body.classList.toggle('menu-open');
+      document.querySelector('#menuButton').setAttribute('aria-expanded', String(opened));
+    });
+    document.querySelector('#scrim').addEventListener('click', () => {
+      document.body.classList.remove('menu-open');
+      document.querySelector('#menuButton').setAttribute('aria-expanded', 'false');
+    });
+
+    document.querySelector('#today').textContent = new Intl.DateTimeFormat('th-TH', { dateStyle: 'long' }).format(new Date());
+    void loadDashboardData();
+  </script>
+</body>
+</html>

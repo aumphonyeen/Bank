@@ -1,0 +1,43 @@
+﻿BANKLITE - SOURCE CODE + DATABASE
+=================================
+
+CONTENTS
+- Laravel/PHP application source, routes, configuration, migrations and seeders
+- Front-end source and the local Thai font files used by the application
+- Tests and Composer/npm manifests with composer.lock
+- database/bank_db.sql (schema and sample data)
+- .env.example (template only; the actual .env and APP_KEY are not included)
+
+REQUIREMENTS ON THE OTHER COMPUTER
+- PHP 8.2 or later with the Laravel-required PHP extensions
+- Composer 2
+- MySQL/MariaDB (XAMPP is suitable)
+- Internet access for the first Composer dependency installation
+
+SETUP
+1. Extract this ZIP. Open PowerShell/Terminal in the extracted BankLite folder.
+2. Start MySQL in XAMPP. Open phpMyAdmin, select Import, choose
+   database/bank_db.sql, and import it. The SQL creates bank_db and its tables
+   and inserts sample records. Importing again replaces the project's CUS0001-
+   CUS0020 sample records; use a clean bank_db if you do not want that.
+3. Install Laravel dependencies:
+      composer install
+4. Create a local environment file and application key (PowerShell):
+      Copy-Item .env.example .env
+      php artisan key:generate
+   Confirm .env uses the correct DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME and
+   DB_PASSWORD for the MySQL server on this computer (defaults: 127.0.0.1,
+   3306, bank_db, root, and an empty password).
+5. Start the app:
+      php artisan serve --host=127.0.0.1 --port=8012
+6. Open http://127.0.0.1:8012 and sign in with the demo account:
+      Employee code: EMP0001
+      Password: BankLite@123
+
+NOTES
+- Import the SQL file as above; do not run migrations after importing it.
+- Do not open public/index.html directly; use the Laravel address above.
+- vendor/, .env, local keys, logs, sessions, caches, and DOCS are intentionally
+  not included. Composer creates vendor/ on the receiving computer.
+- The application and bank data are educational samples, not a real banking
+  service or real financial transactions.
